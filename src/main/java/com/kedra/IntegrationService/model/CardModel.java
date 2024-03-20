@@ -19,7 +19,7 @@ public class CardModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int scryfallId;
+    private String scryfallId;
 
     private String cardName;
     private URL img_url;

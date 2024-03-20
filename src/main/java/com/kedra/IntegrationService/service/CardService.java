@@ -54,7 +54,7 @@ public class CardService {
         }
     }
 
-    public ResponseEntity<String> addCardToCollection(String cardName, URL imgUrl, int scryfall_id, String username) {
+    public ResponseEntity<String> addCardToCollection(String cardName, URL imgUrl, String scryfall_id, String username) {
 
         UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("user doesnt exits"));
         CardModel cardFromRepo = cardRepository.findByScryfallId(scryfall_id).orElse(null);
@@ -69,7 +69,7 @@ public class CardService {
         }
 
         if(user.getCards().contains(cardFromRepo)) {
-            return new ResponseEntity<>("You already have this card in your collection!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("You already have this card in your collection!", HttpStatus.OK);
         }
 
         user.getCards().add(cardFromRepo);
@@ -81,4 +81,12 @@ public class CardService {
         UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("user doesnt exits"));
         return new ResponseEntity<>(user.getCards(), HttpStatus.FOUND);
     }
+
+    public ResponseEntity<List<CardModel>> deleteCardById(String username, String cardId) {
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("user doesnt exits"));
+        user.getCards().removeIf(card -> card.getScryfallId() == cardId);
+        userRepository.save(user);
+        return new ResponseEntity<>(user.getCards(), HttpStatus.OK);
+    }
+
 }

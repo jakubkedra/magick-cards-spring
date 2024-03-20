@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface CardRepository extends JpaRepository<CardModel, Integer> {
     Boolean existsByCardName(String cardName);
-    Optional<CardModel> findByScryfallId(int scryfallId);
+    Optional<CardModel> findByScryfallId(String scryfallId);
     Optional<CardModel> findByUsersId(int userId);
     Optional<CardModel> findByUsersUsername(String username);
 }
