@@ -36,8 +36,7 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/api/auth/**").permitAll();
-//                    auth.requestMatchers("/admin/**").hasRole("ADMIN");
-//                    auth.requestMatchers("/user/**").hasAnyRole("ADMIN", "USER");
+                    auth.requestMatchers("/api/card/**").hasAnyAuthority("ADMIN", "USER");
                     auth.anyRequest().authenticated();
                 })
                 .httpBasic(basic -> basic.authenticationEntryPoint(jwtAuthEntryPoint))

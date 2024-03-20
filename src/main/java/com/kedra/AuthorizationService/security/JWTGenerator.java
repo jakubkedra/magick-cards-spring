@@ -7,23 +7,30 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 
 @Component
 public class JWTGenerator {
 
-    private final long JWT_EXPIRATION = 70000;
+    private final long JWT_EXPIRATION = 700000000;
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
+        Collection<? extends GrantedAuthority> userRole = authentication.getAuthorities();
+        Iterator<? extends GrantedAuthority> iterator = userRole.iterator();
+        String userRoleString = iterator.hasNext() ? iterator.next().getAuthority() : "";
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + JWT_EXPIRATION);
 
         String token = Jwts.builder()
                 .setSubject(username)
+                .claim("role", userRoleString)
                 .setIssuedAt( new Date())
                 .setExpiration(expireDate)
                 .signWith(key, SignatureAlgorithm.HS512)
