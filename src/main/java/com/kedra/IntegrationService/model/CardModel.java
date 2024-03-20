@@ -1,25 +1,29 @@
 package com.kedra.IntegrationService.model;
 
+import com.kedra.AuthorizationService.models.UserEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "cards")
 @Setter
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int db_id;
-    private int scryfall_id;
+    private int id;
+    private int scryfallId;
 
-    private String card_name;
+    private String cardName;
     private URL img_url;
+
+    @ManyToMany(mappedBy = "cards")
+    private List<UserEntity> users = new ArrayList<>();
 }
